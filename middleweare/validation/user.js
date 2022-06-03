@@ -30,3 +30,13 @@ function validateRegister() {
     }
 };
 
+function validateLogin() {
+    return (req, res) => {
+        
+        body('email')
+            .trim()
+            .normalizeEmail(),
+        body('password')
+                .trim()
+    }
+};
