@@ -73,6 +73,25 @@ async function modifyPassword(currentPassword, newPassword, userId) {
     };
 };
 
+async function modifyUserData(firstName, lastName, email, userId) {
+
+    const existing = await User.findOne({ email: new RegExp(`^${email}$`, 'i') });
+    if (existing._id = !userId) {
+        if (existing) {
+            throw new Error(`${email} already exists`);
+        };
+    };
+
+    const user = await User.findById(userId)
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.email = email;
+
+    await user.save();
+    return createToken(user);
+};
+
+
 function createToken(user) {
     return {
         firstName: user.firstName,
