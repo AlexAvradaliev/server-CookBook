@@ -52,6 +52,10 @@ async function login(email, password) {
     };
 };
 
+function loguot() {
+
+};
+
 async function modifyPassword(currentPassword, newPassword, userId) {
     try {
 
@@ -118,4 +122,13 @@ function verifyToken(token) {
         _id: payload._id,
         token
     };
+};
+
+module.exports = {
+    register,
+    login,
+    loguot,
+    modifyPassword,
+    modifyUserData,
+    verifyToken
 };
