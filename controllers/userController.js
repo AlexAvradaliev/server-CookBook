@@ -49,4 +49,18 @@ router.put(`/changeUserData`, async (req, res) => {
     };
 });
 
-router.patch(`/changePassword`, async (req, res) => { });
+router.patch(`/changePassword`, async (req, res) => {  const currentPassword = req.body.currentPassword;
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+    const userId = req.users._id;
+
+    try {
+       if (newPassword != confirmPassword) {
+          throw new error('');
+       };
+
+       const result = await modifyPassword(currentPassword, newPassword, userId);
+       res.status(202).json(result);
+    } catch (err) {
+       console.log(err)
+    }});
