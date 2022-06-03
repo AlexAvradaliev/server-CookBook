@@ -7,6 +7,26 @@ const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
 
+const connectDB = require('./0database/db');
+
+dotenv.config();
+
+start();
+
+async function start() {
+    try {
+
+        await connectDB();
+
+    } catch (err) {
+
+        console.error(`Database Error: ${error.message}`);
+        process.exit(1);
+
+    };
+};
+
+
 const app = express();
 app.use(express.json());
 
