@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const { validationResult } = require('express-validator');
+const { isAuth, isGuest } = require('../middleweare/guards');
+const { validateRegister, validateLogin } = require('../middleweare/validation/user');
 
 const { register, login, loguot, modifyPassword, modifyUserData, verifyToken } = require('../services/userService');
 
-router.post(`/register`, async (req, res) => {
+router.post(`/register`, isGuest(), validateRegister, async (req, res) => {
     const { errors } = validationResult(req);
+
     try {
         const { firstName, lastName, email, password, repassword } = req.body;
         if (errors.length > 0) {
@@ -20,7 +23,7 @@ router.post(`/register`, async (req, res) => {
     };
 });
 
-router.post(`/login`, async (req, res) => {
+router.post(`/login`, isGuest(), validateLogin, async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
@@ -49,18 +52,22 @@ router.put(`/changeUserData`, async (req, res) => {
     };
 });
 
-router.patch(`/changePassword`, async (req, res) => {  const currentPassword = req.body.currentPassword;
+router.patch(`/changePassword`, async (req, res) => {
+    const currentPassword = req.body.currentPassword;
     const newPassword = req.body.newPassword;
     const confirmPassword = req.body.confirmPassword;
     const userId = req.users._id;
 
     try {
-       if (newPassword != confirmPassword) {
-          throw new error('');
-       };
+        if (newPassword != confirmPassword) {
+            throw new error('');
+        };
 
-       const result = await modifyPassword(currentPassword, newPassword, userId);
-       res.status(202).json(result);
+        const result = await modifyPassword(currentPassword, newPassword, userId);
+        res.status(202).json(result);
     } catch (err) {
-       console.log(err)
-    }});
+        console.log(err)
+    }
+});
+
+module.exports = router;

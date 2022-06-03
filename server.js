@@ -5,6 +5,8 @@ const cors = require('cors');
 
 const connectDB = require('./database/db');
 
+const userController = require('./controllers/userController');
+
 connectDB();
 
  
@@ -25,7 +27,9 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-const PORT = process.env.PORT || 5000;
+app.use('/api/auth', userController);
+
+const PORT = process.env.PORT || 5001;
 app.listen(
     PORT,
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
