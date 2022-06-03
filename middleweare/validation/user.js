@@ -37,7 +37,24 @@ const validateLogin = [
         .trim()
 ];
 
+const validateUserData = [
+    body('firstName')
+        .trim(),
+    body('lastName')
+        .trim(),
+    body('email')
+        .trim()
+        .normalizeEmail(),
+    body('firstName')
+        .isLength({ min: 1, max: 12 }).withMessage('first name can be between 1-12 char'),
+    body('lastName')
+        .isLength({ min: 1, max: 12 }).withMessage('last name can be between 1-12 char'),
+    body('email')
+        .isEmail().withMessage('email is not valid'),
+]
+
 module.exports = {
     validateRegister,
     validateLogin,
+    validateUserData,
 };

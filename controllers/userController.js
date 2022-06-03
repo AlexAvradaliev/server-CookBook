@@ -34,7 +34,7 @@ router.post(`/login`, isGuest(), validateLogin, async (req, res) => {
     };
 });
 
-router.get(`/logout`, async (req, res) => {
+router.get(`/logout`,isAuth(), async (req, res) => {
     res.status(204).end();
 });
 
