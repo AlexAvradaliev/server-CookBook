@@ -1,9 +1,20 @@
 const mongoose = require('mongoose');
-const connectDB = async () => {
+const dotenv = require('dotenv');
 
-	const response = await mongoose.connect(process.env.MONGO_URI);
+dotenv.config();
 
-	console.log(`MongoDB Connected ${response.connection.host}`);
+module.exports =  function connectDB() {
+	try {
+		 mongoose.connect(process.env.DB_CONNECT, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+		});
+	
+		console.log(`MongoDB Connected `);
+
+	} catch (error) {
+		console.error(`Database Error: ${error.message}`);
+        process.exit(1);
+	};
 };
 
-module.exports = connectDB;
