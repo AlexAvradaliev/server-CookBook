@@ -24,7 +24,7 @@ async function register(firstName, lastName, email, password) {
         });
 
         await user.save();
-        return user;
+        return createToken(user);
 
     } catch (err) {
         console.error(err);
@@ -45,7 +45,7 @@ async function login(email, password) {
         };
 
         const user = await User.findOne({ email: new RegExp(`^${email}$`, 'i') });
-        return user;
+        return createToken(user);
 
     } catch (err) {
         console.log(err)
@@ -66,9 +66,26 @@ async function modifyPassword(currentPassword, newPassword, userId) {
         user.hashedPassword = await bcrypt.hash(newPassword, 10);
 
         await user.save();
-        return user;
+        return createToken(user);
 
     } catch (error) {
         console.log(err);
+    };
+};
+
+function createToken(user) {
+    return {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        photo: user.photo,
+        _id: user._id,
+        accessToken: jwt.sign({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            photo: user.photo,
+            _id: user._id,
+        }, JWT_SECRET)
     };
 };
