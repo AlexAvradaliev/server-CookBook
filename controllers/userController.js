@@ -4,11 +4,11 @@ const {validationResult} = require('express-validator');
 const { register, login, loguot, modifyPassword, modifyUserData, verifyToken } = require('../services/userService');
 
 router.post(`/register`, async (req, res) => {
-    const {errors} = validationResult(req)
+    const {errors} = validationResult(req);
       try {
          const { firstName, lastName, email, password, repassword } = req.body;
             if(errors.length > 0 ){
-               throw errors
+               throw errors;
             }
          if (password != repassword) {
             throw new Error('');
@@ -25,13 +25,15 @@ router.post(`/login`, async (req, res) => {
       const password = req.body.password;
       try {
          const result = await login(email, password);
-         res.status(200).json(result)
+         res.status(200).json(result);
       } catch (err) {
         console.log(err);
-      }
+      };
  });
 
-router.get(`/logout`, async (req, res) => { });
+router.get(`/logout`, async (req, res) => { 
+    res.status(204).end();
+});
 
 router.put(`/changeUserData`, async (req, res) => { });
 
