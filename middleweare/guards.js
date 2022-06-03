@@ -1,9 +1,10 @@
 function isAuth(){
+    
     return (req,res,next) =>{
         if(req.users){
             next();
         } else {
-            res.status(401).json({message: 'Please login!'});
+            res.status(403).json({message: 'Please login!'});
         };
     };
 };

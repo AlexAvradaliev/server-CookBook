@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const { validationResult } = require('express-validator');
 const { isAuth, isGuest } = require('../middleweare/guards');
-const { validateRegister, validateLogin } = require('../middleweare/validation/user');
+const { validateRegister, validateLogin, validateUserData, validateChangePassword } = require('../middleweare/validation/user');
 
-const { register, login, loguot, modifyPassword, modifyUserData, verifyToken } = require('../services/userService');
+const { register, login, loguot, modifyPassword, modifyUserData, } = require('../services/userService');
 
 router.post(`/register`, isGuest(), validateRegister, async (req, res) => {
     const { errors } = validationResult(req);
@@ -38,7 +38,7 @@ router.get(`/logout`,isAuth(), async (req, res) => {
     res.status(204).end();
 });
 
-router.put(`/changeUserData`, async (req, res) => {
+router.put(`/changeUserData`,isAuth(),validateUserData, async (req, res) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
@@ -52,7 +52,7 @@ router.put(`/changeUserData`, async (req, res) => {
     };
 });
 
-router.patch(`/changePassword`, async (req, res) => {
+router.patch(`/changePassword`,isAuth(),validateChangePassword, async (req, res) => {
     const currentPassword = req.body.currentPassword;
     const newPassword = req.body.newPassword;
     const confirmPassword = req.body.confirmPassword;

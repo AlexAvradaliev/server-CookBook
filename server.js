@@ -4,6 +4,8 @@ const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 
 const connectDB = require('./database/db');
+const auth = require("./middleweare/auth");
+
 
 const userController = require('./controllers/userController');
 
@@ -26,6 +28,8 @@ const limiter = rateLimit({
     max: 300,
 });
 app.use(limiter);
+
+app.use(auth());
 
 app.use('/api/auth', userController);
 

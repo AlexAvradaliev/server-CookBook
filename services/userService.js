@@ -34,6 +34,7 @@ async function register(firstName, lastName, email, password) {
 async function login(email, password) {
 
     try {
+        const user = await User.findOne({ email: new RegExp(`^${email}$`, 'i') });
         if (!user) {
             throw new Error(`Invalid Email or password`);
         };
@@ -44,7 +45,6 @@ async function login(email, password) {
             throw new Error(`Invalid Email or password`);
         };
 
-        const user = await User.findOne({ email: new RegExp(`^${email}$`, 'i') });
         return createToken(user);
 
     } catch (err) {
@@ -109,7 +109,7 @@ function createToken(user) {
             email: user.email,
             photo: user.photo,
             _id: user._id,
-        }, JWT_SECRET)
+        }, process.env.JWT_SECRET)
     };
 };
 
