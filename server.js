@@ -1,13 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const expressMongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
-const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
-const hpp = require('hpp');
 const cors = require('cors');
 
-const connectDB = require('./0database/db');
+const connectDB = require('./database/db');
 
 dotenv.config();
 
@@ -30,7 +27,6 @@ async function start() {
 const app = express();
 app.use(express.json());
 
-app.use(expressMongoSanitize());
 
 app.use(
     helmet({
@@ -38,8 +34,6 @@ app.use(
     })
   );
 
-  app.use(xss());
-  
   app.use(cors());
   
   const limiter = rateLimit({
@@ -48,8 +42,6 @@ app.use(
   });
   
   app.use(limiter);
-  
-  app.use(hpp());
   
   const PORT = process.env.PORT || 5000;
 app.listen(
