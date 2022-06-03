@@ -15,7 +15,6 @@ const recipeSchema = new Schema(
 		},
 		images: {
 			type: [String],
-			default: ['/images/no-image.jpg'],
 		},
 		cuisine: {
 			type: String,
