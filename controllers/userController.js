@@ -20,7 +20,16 @@ router.post(`/register`, async (req, res) => {
       };
  });
 
-router.post(`/login`, async (req, res) => { });
+router.post(`/login`, async (req, res) => {
+    const email = req.body.email;
+      const password = req.body.password;
+      try {
+         const result = await login(email, password);
+         res.status(200).json(result)
+      } catch (err) {
+        console.log(err);
+      }
+ });
 
 router.get(`/logout`, async (req, res) => { });
 
