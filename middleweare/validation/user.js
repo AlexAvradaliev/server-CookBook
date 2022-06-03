@@ -51,10 +51,26 @@ const validateUserData = [
         .isLength({ min: 1, max: 12 }).withMessage('last name can be between 1-12 char'),
     body('email')
         .isEmail().withMessage('email is not valid'),
-]
+];
+
+const validateChangePassword = [
+    body('newPassword')
+    .trim(),
+    body('confirmPassword')
+    .trim(),
+    body('newPassword')
+    .isLength({ min: 6 }).withMessage('password can be 6 char'),
+    body('confirmPassword')
+    .custom(async (value, { req }) => {
+        if (value != req.body.newPassword) {
+            throw new Error('passwords don\'t match');
+        };
+    }),
+];
 
 module.exports = {
     validateRegister,
     validateLogin,
     validateUserData,
+    validateChangePassword
 };
