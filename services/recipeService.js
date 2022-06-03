@@ -12,6 +12,17 @@ async function create(recipe) {
     };
 };
 
+async function getOneById(id) {
+    try {
+        return Recipe.findById(id).populate( "_ownerId", "firstName lastName photo" );
+        
+    } catch (err) {
+        console.log(err);
+    };
+
+};
+
 module.exports = {
     create,
+    getOneById,
 };
