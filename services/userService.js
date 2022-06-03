@@ -89,3 +89,14 @@ function createToken(user) {
         }, JWT_SECRET)
     };
 };
+
+function verifyToken(token) {
+    const payload = jwt.verify(token, JWT_SECRET);
+    return {
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        photo: payload.photo,
+        _id: payload._id,
+        token
+    };
+};
