@@ -114,7 +114,7 @@ function createToken(user) {
 };
 
 function verifyToken(token) {
-    const payload = jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
     return {
         firstName: payload.firstName,
         lastName: payload.lastName,
