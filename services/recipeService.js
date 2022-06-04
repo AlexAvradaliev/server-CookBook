@@ -99,18 +99,42 @@ async function getAllOwner(userId) {
     };
 };
 
-async function deleteById(recipeId, userId){
+async function deleteById(recipeId, userId) {
 
     const findRecipe = await Recipe.findById(recipeId);
-  
+
     try {
-        if(findRecipe._ownerId != userId){
-            throw new Error({message: 'you are not authorize'});
+        if (findRecipe._ownerId != userId) {
+            throw new Error({ message: 'you are not authorize' });
         }
         await Recipe.findByIdAndDelete(recipeId);
     } catch (err) {
         console.log(err);
     };
+};
+
+async function update(recipeId, data, userId) {
+
+    const existing = await Recipe.findById(recipeId);
+
+    if (existing._ownerId != userId) {
+        throw new Error({ message: 'you are not authorize' });
+    };
+
+    existing.images = data.images;
+    existing.ingredients = data.ingredients;
+    existing.groups = data.groups;
+    existing.steps = data.steps;
+    existing.name = data.name;
+    existing.description = data.description;
+    existing.cuisine = data.cuisine;
+    existing.level = data.level;
+    existing.cookTime = data.cookTime;
+    existing.prepTime = data.prepTime;
+    existing.user = data._ownerId;
+
+    await existing.save();
+    return existing;
 };
 
 module.exports = {
