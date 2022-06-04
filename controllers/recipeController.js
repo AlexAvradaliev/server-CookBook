@@ -79,3 +79,19 @@ router.put('/:id', isAuth(), async (req, res) => {
         console.log(err);
     };
 });
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const recipeId = req.params.id;
+        const userId = req.users._id
+
+        await recipe.deleteById(recipeId, userId);
+
+        return res.status(200).json({succes: true});
+
+    } catch (err) {
+        console.log(err);
+    };
+});
+
+module.exports = router;
