@@ -13,3 +13,27 @@ router.get(`/`, async (req, res) => {
     };
     
 });
+
+router.post(`/`, async (req, res) => {
+    try {
+        const data = {
+            images: req.body.images,
+            ingredients: req.body.ingredients,
+            groups: req.body.groups,
+            steps: req.body.steps,
+            name: req.body.name,
+            description:req.body.description,
+            cuisine: req.body.cuisine,
+            level: req.body.level,
+            cookTime: req.body.cookTime,
+            prepTime: req.body.prepTime,
+            _ownerId: req.users._id,
+          };
+            const result = await recipe.create(data);
+            return res.status(201).json(result);
+
+    } catch (err) {
+        console.log(err);
+    };
+    
+});
