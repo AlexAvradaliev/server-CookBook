@@ -1,6 +1,4 @@
 const { body } = require('express-validator');
-const { validationResult } = require('express-validator');
-
 
 const validateRegister = [
 
@@ -22,10 +20,11 @@ const validateRegister = [
     body('password')
         .isLength({ min: 6 }).withMessage('password can be 6 char'),
     body('repassword')
-        .custom(async (value, { req }) => {
+        .custom((value, { req }) => {
             if (value != req.body.password) {
                 throw new Error('passwords don\'t match');
             };
+            return true;
         })
 ];
 
@@ -61,10 +60,11 @@ const validateChangePassword = [
     body('newPassword')
     .isLength({ min: 6 }).withMessage('password can be 6 char'),
     body('confirmPassword')
-    .custom(async (value, { req }) => {
+    .custom((value, { req }) => {
         if (value != req.body.newPassword) {
             throw new Error('passwords don\'t match');
         };
+        return true;
     }),
 ];
 

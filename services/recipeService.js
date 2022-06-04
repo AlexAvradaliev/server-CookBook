@@ -8,7 +8,7 @@ async function create(recipe) {
         return result;
 
     } catch (err) {
-        console.log(err);
+       throw err;
     };
 };
 
@@ -17,7 +17,7 @@ async function getOneById(id) {
         return Recipe.findById(id).populate("_ownerId", "firstName lastName photo");
 
     } catch (err) {
-        console.log(err);
+        throw err;
     };
 };
 
@@ -84,7 +84,7 @@ async function getAll(queryInfo) {
         });
 
     } catch (err) {
-        console.log(err);
+        throw err;
     };
 };
 
@@ -95,7 +95,7 @@ async function getAllOwner(userId) {
             .populate("_ownerId", "firstName lastName photo");
 
     } catch (err) {
-        console.log(err);
+        throw err;
     };
 };
 
@@ -109,16 +109,21 @@ async function deleteById(recipeId, userId) {
         }
         await Recipe.findByIdAndDelete(recipeId);
     } catch (err) {
-        console.log(err);
+        throw err;
     };
 };
 
 async function update(recipeId, data, userId) {
-
+try {
     const existing = await Recipe.findById(recipeId);
 
     if (existing._ownerId != userId) {
-        throw new Error({ message: 'you are not authorize' });
+        const err = {
+            status: 400,
+            msg: `You are not authorize`,
+            param: 'auth'
+        };
+        throw errorWrapper([err])
     };
 
     existing.images = data.images;
@@ -135,6 +140,11 @@ async function update(recipeId, data, userId) {
 
     await existing.save();
     return existing;
+
+} catch (err) {
+    throw err;
+};
+    
 };
 
 module.exports = {

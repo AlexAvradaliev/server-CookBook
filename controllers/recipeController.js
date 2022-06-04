@@ -1,20 +1,28 @@
 const router = require('express').Router();
 const recipe = require('../services/recipeService');
 const { isAuth } = require('../middleweare/guards');
+const { validation } = require('../middleweare/validation/recipe');
+const { validationResult } = require('express-validator');
+const { errorWrapper, mapperStatus } = require('../utils/errorWrapper');
 
 
-router.get(`/`, async (req, res) => {
+
+router.get(`/`, async (req, res, next) => {
     try {
         const queryInfo = req.query;
         let data = await recipe.getAll(queryInfo);
         res.json(data);
     } catch (err) {
-        console.log(err);
+        next (err)
     };
 });
 
-router.post(`/`, async (req, res) => {
+router.post(`/`, validation, async (req, res, next) => {
     try {
+        const { errors } = validationResult(req);
+        if (errors.length > 0) {
+            throw errorWrapper(mapperStatus(errors,400))
+        };
         const data = {
             images: req.body.images,
             ingredients: req.body.ingredients,
@@ -32,32 +40,37 @@ router.post(`/`, async (req, res) => {
         return res.status(201).json(result);
 
     } catch (err) {
-        console.log(err);
+        next (err)
     };
 });
 
-router.get('/owner', isAuth(), async (req, res) => {
+router.get('/owner', isAuth(), async (req, res, next) => {
     try {
         const data = await recipe.getAllOwner(req.users._id);
         res.json(data);
 
     } catch (err) {
-        console.log(err);
+        next (err)
     };
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
     try {
         const data = await recipe.getOneById(req.params.id);
         res.json(data);
 
     } catch (err) {
-        console.log(err);
+        next (err)
     };
 });
 
-router.put('/:id', isAuth(), async (req, res) => {
+router.put('/:id', isAuth(), validation, async (req, res, next) => {
     try {
+        const { errors } = validationResult(req);
+        if (errors.length > 0) {
+            throw errorWrapper(mapperStatus(errors,400))
+        };
+
         const userId = req.users._id;
         const recipeId = req.params.id;
         const data = {
@@ -76,21 +89,21 @@ router.put('/:id', isAuth(), async (req, res) => {
         return res.json(result);
 
     } catch (err) {
-        console.log(err);
+        next (err)
     };
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
     try {
         const recipeId = req.params.id;
         const userId = req.users._id
 
         await recipe.deleteById(recipeId, userId);
 
-        return res.status(200).json({succes: true});
+        return res.status(200).json({ succes: true });
 
     } catch (err) {
-        console.log(err);
+        next (err)
     };
 });
 

@@ -9,6 +9,7 @@ const auth = require("./middleweare/auth");
 
 const userController = require('./controllers/userController');
 const recipeController = require('./controllers/recipeController');
+const responseErrors = require('./middleweare/responseErrors');
 
 connectDB();
 
@@ -34,6 +35,8 @@ app.use(auth());
 
 app.use('/api/auth', userController);
 app.use('/api/recipe', recipeController);
+
+app.use(responseErrors());
 
 const PORT = process.env.PORT || 5001;
 app.listen(

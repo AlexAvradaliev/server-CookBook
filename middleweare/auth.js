@@ -2,17 +2,18 @@ const { verifyToken } = require('../services/userService');
 
 module.exports = () => (req, res, next) => {
     
-    const token = req.headers['x-authorization'];
     try {
+        const token = req.headers['x-authorization'];
         if (token) {
             const userData = verifyToken(token);
             req.users = userData;
+            console.log(req.users)
         }
         next();
 
     } catch (err) {
         
-        res.status(401).json({ message: 'Invalid access token. Please sign in!' });
+        res.status(401).json({ token: 'Invalid access token. Please sign in!' });
     }
 };
 

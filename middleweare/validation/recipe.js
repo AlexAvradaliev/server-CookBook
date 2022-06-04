@@ -102,7 +102,7 @@ const validation = [
 
     body('groups')
         .isArray({ min: 1 }).withMessage('Please add an appropriate group for you recipe')
-        .isIn(level).withMessage(`Please select one of ${groups.join(', ')}`),
+        .isIn(groups).withMessage(`Please select one of ${groups.join(', ')}`),
 
     body('steps')
         .isArray({ min: 1 }).withMessage('Please add the necessary steps to prepare this recipe'),
