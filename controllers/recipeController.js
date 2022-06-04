@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const recipe = require('../services/recipe');
-const { isAuth, isOwner } = require('../middleweare/guards');
+const { isAuth } = require('../middleweare/guards');
 
 
 router.get(`/`, async (req, res) => {
@@ -11,7 +11,6 @@ router.get(`/`, async (req, res) => {
     } catch (err) {
         console.log(err);
     };
-    
 });
 
 router.post(`/`, async (req, res) => {
@@ -35,5 +34,14 @@ router.post(`/`, async (req, res) => {
     } catch (err) {
         console.log(err);
     };
-    
+});
+
+router.get('/owner', isAuth(), async (req, res) => {
+    try {
+        const data = await recipe.getAllOwner(req.users._id);
+        res.json(data);
+
+    } catch (err) {
+        console.log(err);
+    };
 });
