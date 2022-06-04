@@ -123,7 +123,7 @@ try {
             msg: `You are not authorize`,
             param: 'auth'
         };
-        throw errorWrapper([err])
+        throw errorWrapper([err]);
     };
 
     existing.images = data.images;

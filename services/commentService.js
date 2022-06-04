@@ -1,4 +1,5 @@
 const Comment = require('../models/Comment');
+const {errorWrapper} = require('../utils/errorWrapper');
 
 async function getAll(recipeId) {
     try {
@@ -7,7 +8,7 @@ async function getAll(recipeId) {
             .populate('recipe', 'name images')
             .populate('_ownerId', 'firstName lastName photo');
     } catch (err) {
-        throw err
+        throw err;
     };
 };
 
@@ -58,9 +59,13 @@ async function deleteById(commentId, userId) {
         const findComment = await Comment.findById(commentId);
 
         if (findComment._ownerId != userId) {
-            console.log('err');
-            throw new Error({ message: 'you are not authorize' });
-        }
+            const err = {
+                status: 400,
+                msg: `You are not authorize`,
+                param: 'auth'
+            };
+            throw errorWrapper([err]);
+        };
         await Comment.findByIdAndDelete(commentId);
     } catch (err) {
         throw err
@@ -72,8 +77,13 @@ async function findOneById(commentId, userId) {
         const findComment = await Comment.findById(commentId);
 
         if (findComment.recipe_ownerId != userId) {
-            throw new Error({ message: 'you are not authorize' });
-        }
+            const err = {
+                status: 400,
+                msg: `You are not authorize`,
+                param: 'auth'
+            };
+            throw errorWrapper([err]);
+        };
 
         return findComment;
     } catch (err) {
@@ -86,7 +96,12 @@ async function edit(data, userId, commentId) {
         const result = await Comment.findById(commentId);
 
         if (result._ownerId != userId) {
-            throw new Error({ message: 'you are not authorize' });
+            const err = {
+                status: 400,
+                msg: `You are not authorize`,
+                param: 'auth'
+            };
+            throw errorWrapper([err]);
         };
         result.text = data.text;
         result.title = data.title;
