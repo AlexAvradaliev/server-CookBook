@@ -45,3 +45,13 @@ router.get('/owner', isAuth(), async (req, res) => {
         console.log(err);
     };
 });
+
+router.get('/:id', async (req, res) => {
+    try {
+        const data = await recipe.getOneById(req.params.id);
+        res.json(data);
+
+    } catch (err) {
+        console.log(err);
+    };
+});
