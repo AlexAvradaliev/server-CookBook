@@ -83,7 +83,16 @@ async function getAll(queryInfo) {
     });
 };
 
+async function getAllOwner(userId) {
+
+    return Recipe.find({_ownerId: userId})
+    .sort("-createdAt")
+    .populate( "_ownerId", "firstName lastName photo" );
+};
+
 module.exports = {
     create,
     getOneById,
+    getAll,
+    getAllOwner
 };
