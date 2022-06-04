@@ -7,13 +7,12 @@ module.exports = () => (req, res, next) => {
         if (token) {
             const userData = verifyToken(token);
             req.users = userData;
-            console.log(req.users)
-        }
+        };
         next();
 
     } catch (err) {
         
         res.status(401).json({ token: 'Invalid access token. Please sign in!' });
-    }
+    };
 };
 

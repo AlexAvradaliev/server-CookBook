@@ -1,6 +1,9 @@
 const router = require('express').Router();
+const { validationResult } = require('express-validator');
 const comment = require('../services/commentService');
 const { isAuth } = require('../middleweare/guards');
+const{validation} = require('../middleweare/validation/comment');
+const {errorWrapper, mapperStatus} = require('../utils/errorWrapper');
 
 router.get('/recipe/:id', async (req, res, next) => {
     try {
@@ -37,8 +40,13 @@ router.get('/', isAuth(), async (req, res, next) => {
     };
 });
 
-router.post('/:id', isAuth(), async (req, res, next) => {
+router.post('/:id', isAuth(), validation, async (req, res, next) => {
     try {
+        const { errors } = validationResult(req);
+        if (errors.length > 0) {
+            throw errorWrapper(mapperStatus(errors,400))
+        };
+
         const user = req.users
         const data = {
             title: req.body.title,
@@ -68,8 +76,13 @@ router.post('/:id', isAuth(), async (req, res, next) => {
     };
 });
 
-router.put('/:id', isAuth(), async (req, res, next) => {
+router.put('/:id', isAuth(), validation, async (req, res, next) => {
     try {
+        const { errors } = validationResult(req);
+        if (errors.length > 0) {
+            throw errorWrapper(mapperStatus(errors,400))
+        };
+
         const commentId = req.params.id;
         const user = req.users
         const data = req.body;
