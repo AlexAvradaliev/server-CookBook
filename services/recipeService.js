@@ -142,5 +142,6 @@ module.exports = {
     getOneById,
     getAll,
     getAllOwner,
-    deleteById
+    deleteById,
+    update
 };
