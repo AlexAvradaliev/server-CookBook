@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const recipe = require('../services/recipe');
+const recipe = require('../services/recipeService');
 const { isAuth } = require('../middleweare/guards');
 
 
