@@ -9,6 +9,7 @@ const auth = require("./middleweare/auth");
 
 const userController = require('./controllers/userController');
 const recipeController = require('./controllers/recipeController');
+const commentController = require('./controllers/commentController');
 const responseErrors = require('./middleweare/responseErrors');
 
 connectDB();
@@ -35,6 +36,7 @@ app.use(auth());
 
 app.use('/api/auth', userController);
 app.use('/api/recipe', recipeController);
+app.use('/api/comment', commentController);
 
 app.use(responseErrors());
 
