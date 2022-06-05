@@ -10,6 +10,7 @@ const auth = require("./middleweare/auth");
 const userController = require('./controllers/userController');
 const recipeController = require('./controllers/recipeController');
 const commentController = require('./controllers/commentController');
+const ratingController = require('./controllers/ratingController');
 const responseErrors = require('./middleweare/responseErrors');
 
 connectDB();
@@ -37,6 +38,7 @@ app.use(auth());
 app.use('/api/auth', userController);
 app.use('/api/recipe', recipeController);
 app.use('/api/comment', commentController);
+app.use('/api/rating', ratingController);
 
 app.use(responseErrors());
 
