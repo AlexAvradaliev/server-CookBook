@@ -1,7 +1,7 @@
 const { model, Schema, Types: {ObjectId} } = require('mongoose');
 
 const ratingSchema = new Schema({
-    _owner: {
+    _ownerId: {
         type:ObjectId,
 			required: true,
 			ref: 'User',
