@@ -5,6 +5,16 @@ const { isAuth } = require('../middleweare/guards');
 const{validation} = require('../middleweare/validation/comment');
 const {errorWrapper, mapperStatus} = require('../utils/errorWrapper');
 
+router.get('/', isAuth(), async (req, res, next) => {
+    try {
+        const userId = req.users._id;
+        const data = await comment.getByRecipeOwnerId(userId);
+        res.json(data);
+    } catch (err) {
+        next(err);
+    };
+});
+
 router.get('/recipe/:id', async (req, res, next) => {
     try {
         const recipeId = req.params.id;
@@ -30,15 +40,7 @@ router.get('/:id', isAuth(), async (req, res, next) => {
     };
 });
 
-router.get('/', isAuth(), async (req, res, next) => {
-    try {
-        const userId = req.users._id;
-        const data = await comment.getByRecipeOwnerId(userId);
-        res.json(data);
-    } catch (err) {
-        next(err);
-    };
-});
+
 
 router.post('/:id', isAuth(), validation, async (req, res, next) => {
     try {
