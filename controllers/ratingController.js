@@ -1,6 +1,9 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
+const { validationResult } = require('express-validator');
+
 const { isAuth } = require('../middleweare/guards');
+const {errorWrapper, mapperStatus} = require('../utils/errorWrapper');
+const { validation } = require('../middleweare/validation/rating');
 
 const rating = require('../services/ratingService');
 
@@ -27,8 +30,13 @@ router.get('/:recipeId', async (req, res, next) => {
     };
 });
 
-router.post('/:recipeId', async (req, res, next) => {
+router.post('/:recipeId', isAuth(), validation, async (req, res, next) => {
     try {
+        const { errors } = validationResult(req);
+        if (errors.length > 0) {
+            throw errorWrapper(mapperStatus(errors,400))
+        };
+
         const recipeId = req.params.recipeId;
         const userId = req.users._id;
         const value = Number(req.body.rating);
@@ -45,8 +53,13 @@ router.post('/:recipeId', async (req, res, next) => {
     };
 });
 
-router.put('/:recipeId', isAuth(), async (req, res, next) => {
+router.put('/:recipeId', isAuth(), validation, async (req, res, next) => {
     try {
+        const { errors } = validationResult(req);
+        if (errors.length > 0) {
+            throw errorWrapper(mapperStatus(errors,400))
+        };
+        
         const recipeId = req.params.recipeId;
         const userId = req.users._id;
         const data = {
