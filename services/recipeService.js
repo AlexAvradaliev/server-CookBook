@@ -1,4 +1,5 @@
 const Recipe = require('../models/Recipe');
+const { errorWrapper } = require('../utils/errorWrapper');
 
 async function create(recipe) {
     try {
@@ -14,8 +15,17 @@ async function create(recipe) {
 
 async function getOneById(id) {
     try {
-        return Recipe.findById(id).populate("_ownerId", "firstName lastName photo");
-
+        const result= await Recipe.findById(id).populate("_ownerId", "firstName lastName photo");
+        if(!result){
+            const err = {
+                status: 404,
+                msg: `Page not found`,
+                param: 'Page'
+            };
+            throw errorWrapper([err]);
+        };
+        
+        return result;
     } catch (err) {
         throw err;
     };
