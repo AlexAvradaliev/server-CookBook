@@ -51,7 +51,6 @@ router.post('/:id', isAuth(), validation, async (req, res, next) => {
 
         const user = req.users
         const data = {
-            title: req.body.title,
             text: req.body.text,
             recipeOwnerId: req.body.recipeOwnerId,
             _ownerId: req.users._id,
@@ -67,7 +66,6 @@ router.post('/:id', isAuth(), validation, async (req, res, next) => {
                 lastName: user.lastName,
                 photo: user.photo
             },
-            title: result.title,
             text: result.text,
             createdAt: result.createdAt,
             updatedAt: result.updatedAt
@@ -98,7 +96,6 @@ router.put('/:id', isAuth(), validation, async (req, res, next) => {
                 lastName: user.lastName,
                 photo: user.photo
             },
-            title: response.title,
             text: response.text,
         };
         res.json(result);

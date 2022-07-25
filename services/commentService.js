@@ -104,7 +104,6 @@ async function edit(data, userId, commentId) {
             throw errorWrapper([err]);
         };
         result.text = data.text;
-        result.title = data.title;
         await result.save();
         return result;
 

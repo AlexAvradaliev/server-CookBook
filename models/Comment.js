@@ -10,9 +10,6 @@ _ownerId: {
     type: ObjectId,
     ref:'User'
 },
-title: {
-    type: String,
-},
 text: {
     type: String,
 },
