@@ -32,7 +32,7 @@ router.get('/recipe/:id', async (req, res, next) => {
 router.get('/:id', isAuth(), async (req, res, next) => {
     try {
         const userId = req.users._id;
-        const commentId = req.params.id
+        const commentId = req.params.id;
         const data = await comment.findOneById(commentId, userId);
         res.json(data);
     } catch (err) {
@@ -40,16 +40,15 @@ router.get('/:id', isAuth(), async (req, res, next) => {
     };
 });
 
-
-
 router.post('/:id', isAuth(), validation, async (req, res, next) => {
+    
     try {
         const { errors } = validationResult(req);
         if (errors.length > 0) {
-            throw errorWrapper(mapperStatus(errors,400))
+            throw errorWrapper(mapperStatus(errors,400));
         };
 
-        const user = req.users
+        const user = req.users;
         const data = {
             text: req.body.text,
             recipeOwnerId: req.body.recipeOwnerId,
@@ -80,7 +79,7 @@ router.put('/:id', isAuth(), validation, async (req, res, next) => {
     try {
         const { errors } = validationResult(req);
         if (errors.length > 0) {
-            throw errorWrapper(mapperStatus(errors,400))
+            throw errorWrapper(mapperStatus(errors,400));
         };
 
         const commentId = req.params.id;
@@ -94,7 +93,7 @@ router.put('/:id', isAuth(), validation, async (req, res, next) => {
                 _id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                photo: user.photo
+                photo: user.photo,
             },
             text: response.text,
         };
@@ -112,7 +111,7 @@ router.delete('/:id', isAuth(), async (req, res, next) => {
         await comment.deleteById(commentId, userId);
 
         return res.status(200).json({
-            success: true
+            success: true,
         });
     } catch (err) {
         next(err);

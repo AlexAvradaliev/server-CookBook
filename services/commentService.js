@@ -1,5 +1,5 @@
 const Comment = require('../models/Comment');
-const {errorWrapper} = require('../utils/errorWrapper');
+const { errorWrapper } = require('../utils/errorWrapper');
 
 async function getAll(recipeId) {
     try {
@@ -15,8 +15,8 @@ async function getAll(recipeId) {
 async function getByRecipeOwnerId(userId) {
     try {
         const options = {
-            recipeOwnerId: userId,
-            isNewComment: 'true',
+            _ownerId: userId,
+            isNewComment: true,
         };
 
         const result = await Comment.find(options)
@@ -32,11 +32,11 @@ async function changeIsNew(recipeId, userId) {
     try {
         const options = {
             recipe: recipeId,
-            recipeOwnerId: userId,
-            isNewComment: 'true',
+            _ownerId: userId,
+            isNewComment: true,
         };
 
-        await Comment.updateMany(options, { isNewComment: 'false' });
+        await Comment.updateMany(options, { isNewComment: false });
 
     } catch (err) {
         throw err;
@@ -62,13 +62,13 @@ async function deleteById(commentId, userId) {
             const err = {
                 status: 400,
                 msg: `You are not authorize`,
-                param: 'auth'
+                param: 'auth',
             };
             throw errorWrapper([err]);
         };
         await Comment.findByIdAndDelete(commentId);
     } catch (err) {
-        throw err
+        throw err;
     };
 };
 
@@ -80,7 +80,7 @@ async function findOneById(commentId, userId) {
             const err = {
                 status: 400,
                 msg: `You are not authorize`,
-                param: 'auth'
+                param: 'auth',
             };
             throw errorWrapper([err]);
         };
@@ -99,7 +99,7 @@ async function edit(data, userId, commentId) {
             const err = {
                 status: 400,
                 msg: `You are not authorize`,
-                param: 'auth'
+                param: 'auth',
             };
             throw errorWrapper([err]);
         };

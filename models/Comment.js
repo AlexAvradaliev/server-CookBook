@@ -18,7 +18,7 @@ recipeOwnerId: {
 },
 isNewComment: {
     type: String,
-    default: 'true'
+    default: true
 },
     },
     {timestamps: true}

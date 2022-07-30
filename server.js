@@ -6,7 +6,6 @@ const cors = require('cors');
 const connectDB = require('./database/db');
 const auth = require("./middleweare/auth");
 
-
 const userController = require('./controllers/userController');
 const recipeController = require('./controllers/recipeController');
 const commentController = require('./controllers/commentController');
@@ -15,9 +14,10 @@ const responseErrors = require('./middleweare/responseErrors');
 
 connectDB();
 
- 
+
 const app = express();
 app.use(express.json());
+
 
 app.use(
     helmet({
@@ -38,7 +38,7 @@ app.use(auth());
 app.use('/api/auth', userController);
 app.use('/api/recipe', recipeController);
 app.use('/api/comment', commentController);
-app.use('/api/rating', ratingController);
+app.use('/api/feedback', ratingController);
 
 app.use(responseErrors());
 
