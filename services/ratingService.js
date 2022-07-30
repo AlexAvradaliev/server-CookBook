@@ -3,12 +3,15 @@ const Rating = require('../models/Rating');
 async function getOwner(recipeId, userId) {
     try {
         const filter = {
-            _owner: recipeId,
-            recipe: userId
+            _owner: userId,
+            recipe: recipeId,
         };
+
         const data = await Rating.findOne(filter);
-        return data.value; 
+        
+        return {_id: data?._id, value: data?.value}; 
     } catch (err) {
+        console.log(err)
         throw err;
     };
 };
@@ -28,7 +31,7 @@ async function create(data) {
     try {
         const result = new Rating(data);
         await result.save();
-        return result;
+        return {_id: result?._id, value: result?.value};
     } catch (err) {
         throw err;
     };
