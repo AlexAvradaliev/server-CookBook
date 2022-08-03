@@ -18,7 +18,7 @@ router.get('/', isAuth(), async (req, res, next) => {
 router.get('/recipe/:id', async (req, res, next) => {
     try {
         const recipeId = req.params.id;
-        const userId = req.users._id;
+        const userId = req.users?._id;
         if (userId) {
             await comment.changeIsNew(recipeId, userId);
         };

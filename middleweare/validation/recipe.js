@@ -29,7 +29,8 @@ const groups = [
 ];
 
 function arrayTrim(arr) {
-    const results = arr.filter(element => {
+    
+        const results = arr.filter(element => {
         return element !== '';
     });
     return results;
@@ -37,7 +38,7 @@ function arrayTrim(arr) {
 
 const validation = [
 
-    body('name')
+    body('title')
         .trim(),
 
     body('description')
@@ -70,15 +71,22 @@ const validation = [
     return arrayTrim(value);
   }),
 
-    body('name')
+//   body('images')
+// .customSanitizer(value => {
+//     return arrayTrim(value);
+//   }),
+
+//   body('previewImage')
+// .customSanitizer(value => {
+//     return arrayTrim(value);
+//   }),
+
+    body('title')
         .notEmpty().withMessage('Please give the recipe a title'),
 
     body('description')
         .notEmpty().withMessage('Please give the recipe a description')
         .isLength({ max: 500 }).withMessage('Description can not be more than 500 characters'),
-
-    // body('images')
-    //     .isArray({ min: 1 }).withMessage('images can be min 1'),
 
     body('cuisine')
         .notEmpty().withMessage('Please select an appropriate cuisine for your recipe')

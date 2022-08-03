@@ -1,5 +1,6 @@
 const Recipe = require('../models/Recipe');
 const { errorWrapper } = require('../utils/errorWrapper');
+const cloudinary = require('../config/cloudinary')
 
 async function create(recipe) {
     try {
@@ -9,14 +10,14 @@ async function create(recipe) {
         return result;
 
     } catch (err) {
-       throw err;
+        throw err;
     };
 };
 
 async function getOneById(id) {
     try {
-        const result= await Recipe.findById(id).populate("_ownerId", "firstName lastName photo");
-        if(!result){
+        const result = await Recipe.findById(id).populate("_ownerId", "firstName lastName photo");
+        if (!result) {
             const err = {
                 status: 404,
                 msg: `Page not found`,
@@ -24,7 +25,7 @@ async function getOneById(id) {
             };
             throw errorWrapper([err]);
         };
-        
+
         return result;
     } catch (err) {
         throw err;
@@ -42,7 +43,7 @@ async function getAll(queryInfo) {
         //  Searching
         if (searchName) {
             category = {
-                name: {
+                title: {
                     $regex: searchName,
                     $options: "i",
                 },
@@ -50,12 +51,12 @@ async function getAll(queryInfo) {
         } else if (reqQuery.hasOwnProperty('cuisine')) {
             category = {
                 'cuisine': reqQuery.cuisine,
-                'name': { $regex: searchName, $options: 'i' }
+                'title': { $regex: searchName, $options: 'i' }
             };
         } else if (reqQuery.hasOwnProperty('groups')) {
             category = {
                 'groups': reqQuery.groups,
-                'name': { $regex: searchName, $options: 'i' }
+                'title': { $regex: searchName, $options: 'i' }
             };
         };
 
@@ -124,38 +125,66 @@ async function deleteById(recipeId, userId) {
 };
 
 async function update(recipeId, data, userId) {
-try {
-    const existing = await Recipe.findById(recipeId);
+    try {
+        const existing = await Recipe.findById(recipeId);
 
-    if (existing._ownerId != userId) {
-        const err = {
-            status: 400,
-            msg: `You are not authorize`,
-            param: 'auth'
+        if (existing._ownerId != userId) {
+            const err = {
+                status: 400,
+                msg: `You are not authorize`,
+                param: 'auth'
+            };
+            throw errorWrapper([err]);
         };
-        throw errorWrapper([err]);
+
+        existing.images = data.images;
+        existing.ingredients = data.ingredients;
+        existing.groups = data.groups;
+        existing.steps = data.steps;
+        existing.title = data.title;
+        existing.description = data.description;
+        existing.cuisine = data.cuisine;
+        existing.level = data.level;
+        existing.cookTime = data.cookTime;
+        existing.prepTime = data.prepTime;
+        existing.user = data._ownerId;
+
+        await existing.save();
+        return existing;
+
+    } catch (err) {
+        throw err;
     };
 
-    existing.images = data.images;
-    existing.ingredients = data.ingredients;
-    existing.groups = data.groups;
-    existing.steps = data.steps;
-    existing.name = data.name;
-    existing.description = data.description;
-    existing.cuisine = data.cuisine;
-    existing.level = data.level;
-    existing.cookTime = data.cookTime;
-    existing.prepTime = data.prepTime;
-    existing.user = data._ownerId;
-
-    await existing.save();
-    return existing;
-
-} catch (err) {
-    throw err;
 };
-    
-};
+
+async function removeImage(recipeId, image, userId) {
+    try {
+        const existing = await Recipe.findById(recipeId);
+
+        if (existing._ownerId != userId) {
+            const err = {
+                status: 400,
+                msg: `You are not authorize`,
+                param: 'auth'
+            };
+            throw errorWrapper([err]);
+        };
+        const removeImageCloudinary = await cloudinary.uploader.destroy(image.id)
+
+        if (removeImageCloudinary.result == 'ok') {
+
+            const filtredImages = existing.images.filter(x => image.url != x.url);
+            console.log(filtredImages)
+            existing.images = filtredImages;
+
+            await existing.save();
+            return existing;
+        };
+    } catch (err) {
+        throw err;
+    };
+}
 
 module.exports = {
     create,
@@ -163,5 +192,6 @@ module.exports = {
     getAll,
     getAllOwner,
     deleteById,
-    update
+    update,
+    removeImage
 };

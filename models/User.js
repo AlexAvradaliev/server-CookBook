@@ -17,7 +17,10 @@ const userSchema = new Schema({
     },
     photo: {
         type: String,
-        default: '/images/user.webp'
+        default: '/assets/images/user.webp'
+    },
+    idUrl: {
+        type: String,
     }
 },
     { timestamps: true }

@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { validationResult } = require('express-validator');
 const { isAuth, isGuest } = require('../middleweare/guards');
 const { validateRegister, validateLogin, validateUserData, validateChangePassword } = require('../middleweare/validation/user');
-const { errorWrapper, mapperStatus } = require('../utils/errorWrapper')
+const { errorWrapper, mapperStatus } = require('../utils/errorWrapper');
 const user = require('../services/userService');
 
 router.post(`/register`, isGuest(), validateRegister, async (req, res, next) => {

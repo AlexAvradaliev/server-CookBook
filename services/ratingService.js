@@ -11,7 +11,6 @@ async function getOwner(recipeId, userId) {
         
         return {_id: data?._id, value: data?.value}; 
     } catch (err) {
-        console.log(err)
         throw err;
     };
 };

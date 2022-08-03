@@ -7,14 +7,14 @@ const recipeSchema = new Schema(
 			type:ObjectId,
 			ref: 'User',
 		},
-		name: {
+		title: {
 			type: String,
 		},
 		description: {
 			type: String,
 		},
 		images: {
-			type: [String],
+			type: Object,
 		},
 		cuisine: {
 			type: String,

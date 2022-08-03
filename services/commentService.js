@@ -5,7 +5,7 @@ async function getAll(recipeId) {
     try {
         return Comment.find({ recipe: recipeId })
             .sort("-createdAt")
-            .populate('recipe', 'name images')
+            .populate('recipe', 'title images')
             .populate('_ownerId', 'firstName lastName photo');
     } catch (err) {
         throw err;
@@ -21,7 +21,7 @@ async function getByRecipeOwnerId(userId) {
 
         const result = await Comment.find(options)
             .sort("-createdAt")
-            .populate([{ path: '_ownerId', select: ' _id firstName lastName photo' }, { path: 'recipe', select: '_id name images' }]);
+            .populate([{ path: '_ownerId', select: ' _id firstName lastName photo' }, { path: 'recipe', select: '_id title images' }]);
         return result;
     } catch (err) {
         throw err;
