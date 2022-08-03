@@ -126,6 +126,31 @@ async function modifyUserData(firstName, lastName, email, userId) {
     }
 };
 
+async function getAvatarId(userId) {
+    try {
+        const user = await User.findById(userId);
+
+        return user.idUrl
+    } catch (err) {
+        throw err;
+    };
+};
+
+async function modifyAvatar(userId, imgUrl, imgId) {
+    try {
+
+        const user = await User.findById(userId);
+        user.photo = imgUrl;
+        user.idUrl = imgId;
+        
+        await user.save();
+        return createToken(user);
+
+    } catch (err) {
+        throw err;
+    }
+};
+
 
 function createToken(user) {
     return {
@@ -161,5 +186,7 @@ module.exports = {
     loguot,
     modifyPassword,
     modifyUserData,
-    verifyToken
+    verifyToken,
+    modifyAvatar,
+    getAvatarId
 };
