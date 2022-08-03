@@ -59,6 +59,7 @@ router.put('/:recipeId', isAuth(), validation, async (req, res, next) => {
         if (errors.length > 0) {
             throw errorWrapper(mapperStatus(errors,400))
         };
+        console.log(req.body.rating)
         
         const recipeId = req.params.recipeId;
         const userId = req.users._id;

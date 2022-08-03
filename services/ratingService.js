@@ -36,9 +36,9 @@ async function create(data) {
     };
 };
 
-async function edit(id, data) {
+async function edit(recipeId, userId, data) {
     try {
-        const existing = await Rating.findById(id);
+        const existing = await Rating.findOne({recipe: recipeId, _ownerId: userId});
         existing.value = data.value;
         await existing.save();
         return existing;
