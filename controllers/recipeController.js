@@ -28,7 +28,7 @@ router.post(`/`, validation, isAuth(), async (req, res, next) => {
         };
         let bodyData = req.body
         if (bodyData.previewImage.length > 0) {
-            if (!isValid(bodyData.previewImage.map(x => x.mimeType))){
+            if (!isValid(bodyData.previewImage.map(x => x.mimeType))) {
                 const err = {
                     status: 400,
                     msg: `File does not support`,
@@ -39,23 +39,23 @@ router.post(`/`, validation, isAuth(), async (req, res, next) => {
 
             const promises = bodyData.previewImage.map(x =>
                 cloudinary.v2.uploader.upload(x.url, {
-                  folder: "Recipes/recipes",
+                    folder: "Recipes/recipes",
                 })
-                );
-                const images = (await Promise.all(promises)).map((obj) =>{
-                    req.body.images =[...req.body.images, {id: obj.public_id, url: obj.secure_url}]
-                    });
-                bodyData.previewImage = [];
+            );
+            const images = (await Promise.all(promises)).map((obj) => {
+                req.body.images = [...req.body.images, { id: obj.public_id, url: obj.secure_url }]
+            });
+            bodyData.previewImage = [];
         };
 
-        if(bodyData.images.length == 0){
+        if (bodyData.images.length == 0) {
             const err = {
                 status: 400,
                 msg: `Please import an image`,
                 param: 'images'
             };
             throw errorWrapper([err]);
-        } else if(bodyData.images.length > 6){
+        } else if (bodyData.images.length > 6) {
             const err = {
                 status: 400,
                 msg: `Imges can not be more than 6`,
@@ -122,45 +122,35 @@ router.put('/:id', isAuth(), validation, async (req, res, next) => {
         let bodyData = req.body
         if (bodyData.previewImage.length > 0) {
             const valid = bodyData.previewImage.map(x => {
-                if(!isValid(x.mimeType)){
+                if (!isValid(x.mimeType)) {
                     const err = {
                         status: 400,
                         msg: `File does not support`,
                         param: 'images'
                     };
                     throw errorWrapper([err]);
-                }
-                
-            })
-            
-            if (!isValid(bodyData.previewImage.map(x => x.mimeType))){
-                const err = {
-                    status: 400,
-                    msg: `File does not support`,
-                    param: 'images'
                 };
-                throw errorWrapper([err]);
-            };
+            });
 
             const promises = bodyData.previewImage.map(x =>
                 cloudinary.v2.uploader.upload(x.url, {
-                  folder: "Recipes/recipes",
+                    folder: "Recipes/recipes",
                 })
-                );
-                const images = (await Promise.all(promises)).map((obj) =>{
-                    req.body.images =[...req.body.images, {id: obj.public_id, url: obj.secure_url}]
-                    });
-                bodyData.previewImage = [];
+            );
+            const images = (await Promise.all(promises)).map((obj) => {
+                req.body.images = [...req.body.images, { id: obj.public_id, url: obj.secure_url }]
+            });
+            bodyData.previewImage = [];
         };
 
-        if(bodyData.images.length == 0){
+        if (bodyData.images.length == 0) {
             const err = {
                 status: 400,
                 msg: `Please import an image`,
                 param: 'images'
             };
             throw errorWrapper([err]);
-        } else if(bodyData.images.length > 6){
+        } else if (bodyData.images.length > 6) {
             const err = {
                 status: 400,
                 msg: `Imges can not be more than 6`,
