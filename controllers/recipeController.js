@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const recipe = require('../services/recipeService');
+const comment = require('../services/commentService');
 const { isAuth } = require('../middleweare/guards');
 const { validation } = require('../middleweare/validation/recipe');
 const { validationResult } = require('express-validator');
@@ -185,6 +186,7 @@ router.delete('/:id', async (req, res, next) => {
         const userId = req.users._id
 
         await recipe.deleteById(recipeId, userId);
+        await comment.deleteMany(recipeId)
 
         return res.status(200).json({ succes: true });
 

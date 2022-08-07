@@ -1,4 +1,5 @@
 const Recipe = require('../models/Recipe');
+
 const { errorWrapper } = require('../utils/errorWrapper');
 const cloudinary = require('../config/cloudinary')
 
@@ -118,6 +119,19 @@ async function deleteById(recipeId, userId) {
         if (findRecipe._ownerId != userId) {
             throw new Error({ message: 'you are not authorize' });
         }
+        findRecipe.images.map(async(x) => {
+
+            const removeImageCloudinary = await cloudinary.uploader.destroy(x.id)
+           if(!(removeImageCloudinary.result == 'ok')){
+            const err = {
+                status: 500,
+                msg: `Something wrong`,
+                param: 'images'
+            };
+            throw errorWrapper([err]);
+           };
+        });
+
         await Recipe.findByIdAndDelete(recipeId);
     } catch (err) {
         throw err;

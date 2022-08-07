@@ -112,6 +112,15 @@ async function edit(data, userId, commentId) {
     };
 };
 
+async function deleteMany (recipeId){
+    try {
+       await Comment.deleteMany({recipe: recipeId})
+        
+    } catch (err) {
+        throw err
+    };
+};
+
 module.exports = {
     getAll,
     getByRecipeOwnerId,
@@ -119,5 +128,6 @@ module.exports = {
     deleteById,
     findOneById,
     edit,
-    changeIsNew
+    changeIsNew,
+    deleteMany
 };
